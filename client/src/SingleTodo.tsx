@@ -36,7 +36,7 @@ const SingleTodo: React.FC<Props> = ({
   useEffect(() => {
     inputRef.current?.focus();
   }, [editState]);
-
+ 
   return (
     <div className="w-full p-3 bg-slate-300 rounded flex justify-between">
       {editState && editId == id ? (
