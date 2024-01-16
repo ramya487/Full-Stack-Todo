@@ -1,15 +1,25 @@
 import React, { useRef, useState } from 'react'
 import Todos from "./model";
 import SingleTodo from './SingleTodo';
+import axios from 'axios';
 
 interface Todos_ {
     todos: Todos[];
     setTodos: React.Dispatch<React.SetStateAction<Todos[]>>;
 }
 
+interface Response {
+  Status: string;
+}
+
 const TodoList: React.FC<Todos_> = ({todos, setTodos}) => {
-    const handleCheck = (id: number) => {
-        setTodos(todos.map(item => item.id == id ? {id:item.id, todo: item.todo, isDone: !item.isDone} : {id:item.id, todo: item.todo, isDone: item.isDone}))
+    const handleCheck = async (id: number) => {
+        setTodos(todos.map(item => item.id == id ? {id:item.id, todo: item.todo, isDone: !item.isDone} : {id:item.id, todo: item.todo, isDone: item.isDone}));
+        try{
+          const response = await axios.put<Response>(`http://localhost:3001/check/${id}`);
+        }catch (Err){
+          alert(Err);
+        }
     }
 
     const handleDelete = (id: number) => {
