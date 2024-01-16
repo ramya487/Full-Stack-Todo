@@ -1,51 +1,44 @@
 import React, { useState, useEffect } from "react";
-import Header from "./Header";
-import InputField from "./InputField";
-import Todos from "./model";
-import TodoList from "./TodoList";
-import axios from 'axios';
+import Login from "./Login";
+import Page from "./Page";
+import axios from "axios";
+
+import { Router, Routes, Link, Route, useNavigate } from "react-router-dom";
+import Signup from "./Signup";
 
 const App: React.FC = () => {
-  const [todo, setTodo] = useState<string>("");
-
-  const [todos, setTodos] = useState<Todos[]>([]);
-
-  const handleAdd = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try{
-      const response = await axios.post<Todos[]>(`${process.env.REACT_APP_BACKEND_URL}/add`, {
-        todo: todo
-      });
-      if (response){
-        setTodos(response.data);
-        setTodo("");
-      }
-    }catch (Err){
-      alert(Err);
-    }
+  const navigate = useNavigate();
+  interface Response {
+    Status: string;
+    signupid: number;
+    email: string;
   }
-
   useEffect(() => {
-    const fetchData = async () => {
-      try{
-        console.log(process.env.REACT_APP_BACKEND_URL);
-      const response = await axios.get<Todos[]>(`${process.env.REACT_APP_BACKEND_URL}/`);
-      if (response){
-        console.log(response);
-        setTodos(response.data);
+    const checkAuth = async () => {
+      try {
+        const response = await axios.get<Response>(
+          `${process.env.REACT_APP_BACKEND_URL}/`
+        );
+        if (response.data.Status == "Authenticated") {
+          // find an alternative to local storage
+          localStorage.setItem('signupid', response.data.signupid.toString());
+          localStorage.setItem('email', response.data.email);
+          navigate("/app");
+        }
+      } catch (error) {
+        alert(error);
       }
-      }catch (Err){
-        alert(Err);
-      }
-    }
-    fetchData();
-  },[])
-  
+    };
+    checkAuth();
+  },[]);
+
   return (
     <div>
-      <Header />
-      <InputField todo={todo} setTodo={setTodo} handleAdd={handleAdd} />
-      <TodoList todos={todos} setTodos={setTodos}/>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/app" element={<Page />} />
+      </Routes>
     </div>
   );
 };

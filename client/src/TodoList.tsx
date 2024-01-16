@@ -14,7 +14,7 @@ interface Response {
 
 const TodoList: React.FC<Todos_> = ({todos, setTodos}) => {
     const handleCheck = async (id: number) => {
-        setTodos(todos.map(item => item.id == id ? {id:item.id, todo: item.todo, isDone: !item.isDone} : {id:item.id, todo: item.todo, isDone: item.isDone}));
+        setTodos(todos.map(item => item.id == id ? {id:item.id, todo: item.todo, isDone: !item.isDone, signupid: item.signupid} : {id:item.id, todo: item.todo, isDone: item.isDone, signupid: item.signupid}));
         try{
           const response = await axios.put<Response>(`${process.env.REACT_APP_BACKEND_URL}/check/${id}`);
         }catch (Err){
@@ -50,7 +50,7 @@ const TodoList: React.FC<Todos_> = ({todos, setTodos}) => {
       } catch (Err){
         alert(Err);
       }
-      setTodos(todos.map(item => item.id == id ? {id: item.id, todo: edit, isDone: item.isDone} : item));
+      setTodos(todos.map(item => item.id == id ? {id: item.id, todo: edit, isDone: item.isDone, signupid: item.signupid} : item));
       setEditState(false);
       setEditId(-1);
       setEdit("");
