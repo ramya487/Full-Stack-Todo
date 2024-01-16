@@ -1,0 +1,67 @@
+/*
+understanding type assignment in typescript
+
+The only difference between in ts and js is that in ts we assign types to identifiers
+so that we could catch the errors during the development phase itself
+
+just understand how to do it for various react features like props, hooks etc...
+
+let name: string;
+let age: number | string;
+let students: string[];
+
+interface Person {
+  n: string;
+  a?: number; // optional
+}
+
+// extending an interface
+interface Man extends Person {
+  profession: string;
+}
+
+let man: Man = {
+  profession: "Dev",
+  n: "Hallen",
+}
+
+// extending type(s)
+type X = {
+  a: string;
+  b: number;
+}
+
+type Y = X & {
+  c: string;
+  d: number;
+}
+
+let y: Y = {
+  c: "Julia",
+  d: 78,
+  a: "Mojo",
+  b: 90
+}
+
+// type Person = {
+//   n: string;
+//   a?: number;
+// }
+
+let person: Person;
+
+let personArray: Person[];
+
+let printName: (name: string) => void;
+
+// function printName(name: string){
+//   console.log(name);
+// }
+
+// printName("Aash");
+
+let notrecommended: any;
+let insteaduse: unknown;
+
+let dontknowreturntype: (name: string) => never;
+*/
