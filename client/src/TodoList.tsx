@@ -16,14 +16,19 @@ const TodoList: React.FC<Todos_> = ({todos, setTodos}) => {
     const handleCheck = async (id: number) => {
         setTodos(todos.map(item => item.id == id ? {id:item.id, todo: item.todo, isDone: !item.isDone} : {id:item.id, todo: item.todo, isDone: item.isDone}));
         try{
-          const response = await axios.put<Response>(`http://localhost:3001/check/${id}`);
+          const response = await axios.put<Response>(`${process.env.REACT_APP_BACKEND_URL}/check/${id}`);
         }catch (Err){
           alert(Err);
         }
     }
 
-    const handleDelete = (id: number) => {
+    const handleDelete = async (id: number) => {
         setTodos(todos.filter(item => item.id != id))
+        try {
+          const response = await axios.delete<Response>(`${process.env.REACT_APP_BACKEND_URL}/delete/${id}`);
+        } catch (Err){
+          alert(Err);
+        }
     }
 
     const [edit, setEdit] = useState<string>("");
@@ -36,8 +41,15 @@ const TodoList: React.FC<Todos_> = ({todos, setTodos}) => {
       setEdit((todos.filter(item => item.id == id))[0].todo);
     }
 
-    const handleEditSubmit = (e:React.FormEvent, id: number) => {
+    const handleEditSubmit = async (e:React.FormEvent, id: number) => {
       e.preventDefault();
+      try {
+        const response = await axios.post<Response>(`${process.env.REACT_APP_BACKEND_URL}/edit/${id}`, {
+          edit: edit
+        });
+      } catch (Err){
+        alert(Err);
+      }
       setTodos(todos.map(item => item.id == id ? {id: item.id, todo: edit, isDone: item.isDone} : item));
       setEditState(false);
       setEditId(-1);

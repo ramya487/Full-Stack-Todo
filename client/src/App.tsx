@@ -10,19 +10,26 @@ const App: React.FC = () => {
 
   const [todos, setTodos] = useState<Todos[]>([]);
 
-  const handleAdd = (e: React.FormEvent) => {
+  const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (todo){
-      setTodos([...todos, {id: Date.now(), todo: todo, isDone: false}]);
-      setTodo("");
+    try{
+      const response = await axios.post<Todos[]>(`${process.env.REACT_APP_BACKEND_URL}/add`, {
+        todo: todo
+      });
+      if (response){
+        setTodos(response.data);
+        setTodo("");
+      }
+    }catch (Err){
+      alert(Err);
     }
   }
 
   useEffect(() => {
     const fetchData = async () => {
       try{
-      const response = await axios.get<Todos[]>("http://localhost:3001/");
+        console.log(process.env.REACT_APP_BACKEND_URL);
+      const response = await axios.get<Todos[]>(`${process.env.REACT_APP_BACKEND_URL}/`);
       if (response){
         console.log(response);
         setTodos(response.data);
