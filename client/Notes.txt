@@ -65,3 +65,7 @@ let insteaduse: unknown;
 
 let dontknowreturntype: (name: string) => never;
 */
+
+useReducer
+In useReducer we cannot fetch data inside reducer function asynchronously (like getting data from server)
+thus fetch data outside reducer and send the data to the reducer for assignment and handling

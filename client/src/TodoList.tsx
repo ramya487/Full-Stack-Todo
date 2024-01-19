@@ -2,19 +2,21 @@ import React, { useRef, useState } from 'react'
 import Todos from "./model";
 import SingleTodo from './SingleTodo';
 import axios from 'axios';
+import {ACTIONS} from "./Page";
+import { Action } from './Page';
 
 interface Todos_ {
     todos: Todos[];
-    setTodos: React.Dispatch<React.SetStateAction<Todos[]>>;
+    dispatch: React.Dispatch<Action>;
 }
 
 interface Response {
   Status: string;
 }
 
-const TodoList: React.FC<Todos_> = ({todos, setTodos}) => {
+const TodoList: React.FC<Todos_> = ({todos, dispatch}) => {
     const handleCheck = async (id: number) => {
-        setTodos(todos.map(item => item.id == id ? {id:item.id, todo: item.todo, isDone: !item.isDone, signupid: item.signupid} : {id:item.id, todo: item.todo, isDone: item.isDone, signupid: item.signupid}));
+        dispatch({type: ACTIONS.CHECK_TODO, payload: {id: id}});
         try{
           const response = await axios.put<Response>(`${process.env.REACT_APP_BACKEND_URL}/check/${id}`);
         }catch (Err){
@@ -23,7 +25,7 @@ const TodoList: React.FC<Todos_> = ({todos, setTodos}) => {
     }
 
     const handleDelete = async (id: number) => {
-        setTodos(todos.filter(item => item.id != id))
+      dispatch({type: ACTIONS.DELETE_TODO, payload: {id: id}});
         try {
           const response = await axios.delete<Response>(`${process.env.REACT_APP_BACKEND_URL}/delete/${id}`);
         } catch (Err){
@@ -50,7 +52,7 @@ const TodoList: React.FC<Todos_> = ({todos, setTodos}) => {
       } catch (Err){
         alert(Err);
       }
-      setTodos(todos.map(item => item.id == id ? {id: item.id, todo: edit, isDone: item.isDone, signupid: item.signupid} : item));
+      dispatch({type: ACTIONS.EDIT_TODO, payload: {id: id, task: edit}});
       setEditState(false);
       setEditId(-1);
       setEdit("");

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import Header from "./Header";
 import InputField from "./InputField";
 import Todos from "./model";
@@ -7,15 +7,68 @@ import axios from "axios";
 
 import { Router, Routes, Link, Route } from "react-router-dom";
 
+export type Action = {
+  type: string;
+  payload: {
+    id?: number;
+    data?: Todos[];
+    task?: string;
+  };
+};
+
+export const ACTIONS = {
+  ADD_TODO: "add-todo",
+  CHECK_TODO: "check-todo",
+  EDIT_TODO: "edit-todo",
+  DELETE_TODO: "delete-todo",
+};
+
+const reducer = (todos: Todos[], action: Action) => {
+  switch (action.type) {
+    case ACTIONS.ADD_TODO:
+      return action.payload.data || todos;
+    case ACTIONS.CHECK_TODO:
+      return todos.map((item) =>
+        item.id == action.payload.id
+          ? {
+              id: item.id,
+              todo: item.todo,
+              isDone: !item.isDone,
+              signupid: item.signupid,
+            }
+          : {
+              id: item.id,
+              todo: item.todo,
+              isDone: item.isDone,
+              signupid: item.signupid,
+            }
+      );
+    case ACTIONS.DELETE_TODO:
+      return todos.filter((item) => item.id != action.payload.id);
+    // case ACTIONS.EDIT_TODO:
+    //   return todos.map((item) =>
+    //     item.id == action.payload.id
+    //       ? {
+    //           ...item,
+    //           todo: action.payload.task,
+    //         }
+    //       : item
+    //   );
+    default:
+      return todos;
+  }
+};
+
 const Page = () => {
   const [todo, setTodo] = useState<string>("");
 
-  const [todos, setTodos] = useState<Todos[]>([]);
+  const [todos, dispatch] = useReducer(reducer, []);
 
-  const signupid = localStorage.getItem('signupid');
+  const signupid = localStorage.getItem("signupid");
 
   const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!todo) return;
     try {
       const response = await axios.post<Todos[]>(
         `${process.env.REACT_APP_BACKEND_URL}/add/${signupid}`,
@@ -24,7 +77,7 @@ const Page = () => {
         }
       );
       if (response) {
-        setTodos(response.data);
+        dispatch({ type: ACTIONS.ADD_TODO, payload: { data: response.data } });
         setTodo("");
       }
     } catch (Err) {
@@ -41,7 +94,10 @@ const Page = () => {
         );
         if (response) {
           console.log(response);
-          setTodos(response.data);
+          dispatch({
+            type: ACTIONS.ADD_TODO,
+            payload: { data: response.data },
+          });
         }
       } catch (Err) {
         alert(Err);
@@ -53,7 +109,7 @@ const Page = () => {
     <div>
       <Header />
       <InputField todo={todo} setTodo={setTodo} handleAdd={handleAdd} />
-      <TodoList todos={todos} setTodos={setTodos} />
+      <TodoList todos={todos} dispatch={dispatch} />
     </div>
   );
 };
