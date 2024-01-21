@@ -9,9 +9,9 @@ A full stack Todo list application
 - ORM (Prisma) is used to control the interaction to the database
 
 ### Tech Stack
-Frontend: TypeScript, React, Tailwind CSS
-Backend: JavaScript, Node.js, Express.js
-Database: MySQL
-ORM: Prisma
+- Frontend: TypeScript, React, Tailwind CSS
+- Backend: JavaScript, Node.js, Express.js
+- Database: MySQL
+- ORM: Prisma
 
 ### Demo
