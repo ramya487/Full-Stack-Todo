@@ -1,3 +1,4 @@
+// This is for implementing server side without orm (prisma)
 const express = require("express");
 const app = express();
 const bcrypt = require("bcrypt");

@@ -1,3 +1,4 @@
+// This is for implementing server side with orm (prisma)
 const express = require("express");
 const app = express();
 
