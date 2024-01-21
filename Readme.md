@@ -15,3 +15,4 @@ A full stack Todo list application
 - ORM: Prisma
 
 ### Demo
+[Check out the demo here](https://drive.google.com/file/d/1cDCyTysUX0PI9BTp7jXJOmzuSxcFYmXv/view?usp=sharing)
