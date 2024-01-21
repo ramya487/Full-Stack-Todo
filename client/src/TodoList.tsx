@@ -15,7 +15,7 @@ interface Response {
 }
 
 const TodoList: React.FC<Todos_> = ({todos, dispatch}) => {
-    const handleCheck = async (id: number) => {
+    const handleCheck = async (id: string) => {
         dispatch({type: ACTIONS.CHECK_TODO, payload: {id: id}});
         try{
           const response = await axios.put<Response>(`${process.env.REACT_APP_BACKEND_URL}/check/${id}`);
@@ -24,7 +24,7 @@ const TodoList: React.FC<Todos_> = ({todos, dispatch}) => {
         }
     }
 
-    const handleDelete = async (id: number) => {
+    const handleDelete = async (id: string) => {
       dispatch({type: ACTIONS.DELETE_TODO, payload: {id: id}});
         try {
           const response = await axios.delete<Response>(`${process.env.REACT_APP_BACKEND_URL}/delete/${id}`);
@@ -35,18 +35,18 @@ const TodoList: React.FC<Todos_> = ({todos, dispatch}) => {
 
     const [edit, setEdit] = useState<string>("");
     const [editState, setEditState] =useState<boolean>(false);
-    const [editId, setEditId] = useState<number>(-1);
+    const [editId, setEditId] = useState<string>("");
 
-    const handleEdit = (id: number) => {
+    const handleEdit = (id: string) => {
       setEditState(!editState);
       setEditId(id);
       setEdit((todos.filter(item => item.id == id))[0].todo);
     }
 
-    const handleEditSubmit = async (e:React.FormEvent, id: number) => {
+    const handleEditSubmit = async (e:React.FormEvent, id: string) => {
       e.preventDefault();
       try {
-        const response = await axios.post<Response>(`${process.env.REACT_APP_BACKEND_URL}/edit/${id}`, {
+        const response = await axios.put<Response>(`${process.env.REACT_APP_BACKEND_URL}/edit/${id}`, {
           edit: edit
         });
       } catch (Err){
@@ -54,7 +54,7 @@ const TodoList: React.FC<Todos_> = ({todos, dispatch}) => {
       }
       dispatch({type: ACTIONS.EDIT_TODO, payload: {id: id, task: edit}});
       setEditState(false);
-      setEditId(-1);
+      setEditId("");
       setEdit("");
     }
   return (

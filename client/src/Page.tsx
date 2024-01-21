@@ -5,12 +5,11 @@ import Todos from "./model";
 import TodoList from "./TodoList";
 import axios from "axios";
 
-import { Router, Routes, Link, Route } from "react-router-dom";
 
 export type Action = {
   type: string;
   payload: {
-    id?: number;
+    id?: string;
     data?: Todos[];
     task?: string;
   };
@@ -43,17 +42,17 @@ const reducer = (todos: Todos[], action: Action) => {
               signupid: item.signupid,
             }
       );
+    case ACTIONS.EDIT_TODO:
+      return todos.map((item) =>
+        item.id == action.payload.id
+          ? {
+              ...item,
+              todo: action.payload.task || "",
+            }
+          : item
+      );
     case ACTIONS.DELETE_TODO:
       return todos.filter((item) => item.id != action.payload.id);
-    // case ACTIONS.EDIT_TODO:
-    //   return todos.map((item) =>
-    //     item.id == action.payload.id
-    //       ? {
-    //           ...item,
-    //           todo: action.payload.task,
-    //         }
-    //       : item
-    //   );
     default:
       return todos;
   }
@@ -76,8 +75,9 @@ const Page = () => {
           todo: todo,
         }
       );
+
       if (response) {
-        dispatch({ type: ACTIONS.ADD_TODO, payload: { data: response.data } });
+        // dispatch({ type: ACTIONS.ADD_TODO, payload: { data: response.data } });
         setTodo("");
       }
     } catch (Err) {
@@ -104,7 +104,7 @@ const Page = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [todo]);
   return (
     <div>
       <Header />

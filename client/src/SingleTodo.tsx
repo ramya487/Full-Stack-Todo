@@ -5,17 +5,17 @@ import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 
 interface Props {
-  id: number;
+  id: string;
   todo: string;
   isDone: boolean;
-  handleCheck: (id: number) => void;
-  handleDelete: (id: number) => void;
-  handleEdit: (id: number) => void;
+  handleCheck: (id: string) => void;
+  handleDelete: (id: string) => void;
+  handleEdit: (id: string) => void;
   editState: boolean;
-  editId: number;
+  editId: string;
   edit: string;
   setEdit: React.Dispatch<React.SetStateAction<string>>;
-  handleEditSubmit: (e: React.FormEvent, id: number) => void;
+  handleEditSubmit: (e: React.FormEvent, id: string) => void;
 }
 
 const SingleTodo: React.FC<Props> = ({

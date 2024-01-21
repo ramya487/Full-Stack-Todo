@@ -26,6 +26,7 @@ const Login = () => {
           password: password,
         }
       );
+      // console.log(response);
       if (response.data.Status == "Login Success") {
         localStorage.setItem("signupid", response.data.signupid.toString());
         localStorage.setItem("email", response.data.email);

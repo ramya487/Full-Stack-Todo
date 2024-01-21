@@ -1,5 +1,5 @@
 export default interface Todos {
-    id: number;
+    id: string;
     todo: string;
     isDone: boolean;
     signupid: number;

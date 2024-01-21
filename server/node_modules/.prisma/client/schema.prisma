@@ -1,0 +1,23 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model signup {
+  id         String   @id @default(uuid()) //@default(autoincrement())
+  email  String
+  password   String
+  taskOwned tasks[]  @relation("TaskOwner")
+}
+
+model tasks {
+  id         String   @id @default(uuid()) //@default(autoincrement())
+  todo  String
+  isDone   Int
+  signupuser signup @relation("TaskOwner",fields: [signupid], references: [id])
+  signupid String
+}
