@@ -1,4 +1,17 @@
-### Full-Stack-Todo
-A full stack Todo list application that all the crud (Create, Read, Update, Delete) functionalities
+## Full-Stack-Todo
+A full stack Todo list application
 
-# Features
+### Features
+- Authentication: Secure authentication using jwt and cookies
+- User based storage: Different users could use this application to store tasks individually
+- CRUD (Create, Read, Update, Delete) functionalities
+- Data involved is managed through MySQL
+- ORM (Prisma) is used to control the interaction to the database
+
+### Tech Stack
+Frontend: TypeScript, React, Tailwind CSS
+Backend: JavaScript, Node.js, Express.js
+Database: MySQL
+ORM: Prisma
+
+### Demo
